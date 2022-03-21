@@ -6,6 +6,28 @@ date: '2022-03-21'
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+library(RSelenium)
+library(basictabler)
+
+shell("npx kill-port 4444")
+
+driver <- rsDriver(browser=c("chrome"), chromever="98.0.4758.102",port = 4444L)
+driver$add_experimental_option('excludeSwitches', 'enable-logging')
+remote <- driver[["client"]]
+remote$navigate("https://www.flipkart.com")
+
+Sys.sleep(5)
+remote$click(1)
+
+inp <- remote$findElement(using = 'css', "[class='_3704LK']")
+inp$sendKeysToElement(list("camera", "\uE007"))
+
+tit <- remote$findElements(using="css" ,"[class='_4rR01T']")
+tit_li <- unlist(lapply(tit, function(x){x$getElementText()}))
+
+print(tit_li)
+
 ```
 
 ## R Markdown
